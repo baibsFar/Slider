@@ -1,0 +1,1 @@
+.main__slide__container{position:relative;background-color:grey}.main__slide__container>.slides{position:relative;width:100%;height:100%;transition:transform .3s cubic-bezier(.455,.03,.515,.955)}.main__slide__container>.slides .slide{position:relative;display:flex;flex-direction:row;justify-content:center;align-items:center;font-size:30px;font-weight:600;width:100%;height:100%}
