@@ -7,8 +7,6 @@
  *    height: Number | String
  *  },
  *  loop: Boolean,
- *  prevController: String | HTMLElement,
- *  nextController: String | HTMLElement,
  *  overflow: String,
  *  autoplay: Boolean,
  *  transition: {
@@ -64,20 +62,6 @@ function Slider(options) {
     transition.timingFunction = options.transition.timingFunction
   }
 
-  let controllers = {}
-
-  if (typeof options.prevController === 'string') {
-    controllers.prevController = $(options.prevController)
-  } else {
-    controllers.prevController = options.prevController
-  }
-
-  if (typeof options.nextController === 'string') {
-    controllers.nextController = $(options.nextController)
-  } else {
-    controllers.nextController = options.nextController
-  }
-
   container.style.width = size.width + ''
   container.style.height = size.height + ''
   container.style.overflow = overflow
@@ -110,9 +94,6 @@ function Slider(options) {
     }
     slides.style.transform = `translateX(calc(${size.width} * ${-currentPos}))`
   }
-
-  controllers.prevController.addEventListener('click', slidePrev)
-  controllers.nextController.addEventListener('click', slideNext)
 
   if (autoplay === true) {
     setInterval(() => {
