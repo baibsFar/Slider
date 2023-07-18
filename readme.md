@@ -29,8 +29,31 @@ Slider({
   prevController: "#first-controller>.prev",
   nextController: "#first-controller>.next",
   overflow: 'hidden',
-  autoplay: true
+  autoplay: true,
+  transition: {
+    duration: 3000, //  Miliseconds
+    timingFunction: 'ease-in-out' // CSS Transition timing function
+  }
 })
+```
+
+## Methods
+You can put Slider into variable as you can make less rewritting ans using methods.
+```js
+const slider1 = Slider(options)
+```
+- slideNext(): Move the slide to the next
+```js
+document.querySelector('.my-button').addEventListener('click', () => slider.slideNext())
+```
+- slideNPrev(): Move the slide to the previous
+```js
+document.querySelector('.my-button').addEventListener('click', () => slider.slidePrev())
+```
+- slideTo(target: number): Move the slide to the specified target position as you arrange your slides
+```js
+// Here the slide moves to the third positionçà)
+document.querySelector('.my-button').addEventListener('click', () => slider.slideTo(3))
 ```
 
 Happy Hacking XD
