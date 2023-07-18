@@ -3,14 +3,18 @@
  * @param {{
  *  container: String | HTMLElement,
  *  size: {
- *    width: Number,
- *    height: Number
+ *    width: Number | String,
+ *    height: Number | String
  *  },
  *  loop: Boolean,
  *  prevController: String | HTMLElement,
  *  nextController: String | HTMLElement,
  *  overflow: String,
- *  autoplay: Boolean
+ *  autoplay: Boolean,
+ *  transition: {
+ *    duration: Number,
+ *    timingFunction: String
+ * }
  * }} options 
  */
 function Slider(options) {
@@ -47,7 +51,18 @@ function Slider(options) {
 
   const slides = container.querySelector('.slides')
   const slideItems = slides.querySelectorAll('.slide')
-  const size = options.size
+  const size = {
+    width: typeof options.size.width === 'number' ? `${options.size.width}px` : options.size.width,
+    height: typeof options.size.height === 'number' ? `${options.size.height}px` : options.size.height
+  }
+  let transition = {}
+  if (!options.transition) {
+    transition.duration = 500
+    transition.timingFunction = 'ease-in-out'
+  } else {
+    transition.duration = options.transition.duration
+    transition.timingFunction = options.transition.timingFunction
+  }
 
   let controllers = {}
 
@@ -63,32 +78,37 @@ function Slider(options) {
     controllers.nextController = options.nextController
   }
 
-  container.style.width = `${size.width}px`
-  container.style.height = `${size.height}px`
+  container.style.width = size.width + ''
+  container.style.height = size.height + ''
   container.style.overflow = overflow
 
+  slides.style.transition = `transform ${transition.duration}ms ${transition.timingFunction}`
   slides.style.display = 'grid'
-  slides.style.gridTemplateColumns = `repeat(${slideItems.length}, ${size.width}px)`
-  slides.style.gridTemplateRows = `${size.height}px`
+  slides.style.gridTemplateColumns = `repeat(${slideItems.length}, ${size.width})`
+  slides.style.gridTemplateRows = size.height + ''
 
+  /**
+   * Move the slide to previous slide
+   */
   function slidePrev() {
     if (currentPos > 0) {
       currentPos--
-      slides.style.transform = `translateX(${size.width * (-currentPos)}px)`
     } else if (currentPos === 0 && loop === true) {
       currentPos = slideItems.length - 1
-      slides.style.transform = `translateX(-${size.width * (slideItems.length - 1)}px)`
     }
+    slides.style.transform = `translateX(calc(${size.width} * ${-currentPos}))`
   }
 
+  /**
+   * Move the slide to the next slide
+   */
   function slideNext() {
     if (currentPos < slideItems.length - 1) {
       currentPos++
-      slides.style.transform = `translateX(${size.width * (-currentPos)}px)`
     } else if (currentPos === slideItems.length - 1 && loop === true) {
       currentPos = 0
-      slides.style.transform = 'translateX(0)'
     }
+    slides.style.transform = `translateX(calc(${size.width} * ${-currentPos}))`
   }
 
   controllers.prevController.addEventListener('click', slidePrev)
@@ -98,5 +118,22 @@ function Slider(options) {
     setInterval(() => {
       slideNext()
     }, 5000)
+  }
+
+  /**
+   * Move the slide to target position. Target position begin at 0
+   * @param {Number} targetPos 
+   */
+  function slideTo(targetPos) {
+    if (targetPos > 0 && targetPos <= slideItems.length) {
+      currentPos = targetPos - 1
+      slides.style.transform = `translateX(calc(${size.width} * ${-currentPos}))`
+    }
+  }
+
+  return {
+    slidePrev,
+    slideNext,
+    slideTo
   }
 }
