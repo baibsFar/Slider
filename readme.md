@@ -46,7 +46,7 @@ const slider1 = Slider(options)
 ```js
 document.querySelector('.my-button').addEventListener('click', () => slider.slideNext())
 ```
-- slideNPrev(): Move the slide to the previous
+- slidePrev(): Move the slide to the previous
 ```js
 document.querySelector('.my-button').addEventListener('click', () => slider.slidePrev())
 ```
